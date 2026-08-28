@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>L'Eredità di Arthur</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&display=swap" rel="stylesheet">
+    <!-- Libreria per la scansione dei QR Code -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <div id="vignette"></div>
+
+    <!-- HUD Superiore -->
+    <header id="ui-header">
+        <h1 class="hud-title">Capitolo I</h1>
+        <div id="current-objective">Individua il bersaglio sulla mappa.</div>
+    </header>
+
+    <!-- Mappa Interattiva -->
+    <main id="map-area">
+        <div id="map-container">
+            <!-- I segnalini vengono generati dinamicamente dal JS -->
+        </div>
+    </main>
+
+    <!-- Schermata di Avvio -->
+    <div id="intro-screen" class="modal">
+        <div class="modal-content rdr-paper-bg" style="border-color: var(--rdr-red); box-shadow: 0 0 50px rgba(139,0,0,0.8);">
+            <h2 class="red-title" style="font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">L'Eredità di Arthur</h2>
+            <p class="clue-text" style="font-size: 1.2rem; margin-bottom: 25px;">Un'avventura per i tuoi 15 anni, Ludovico.</p>
+            <button id="start-game-btn" class="rdr-btn">INIZIA LA CACCIA</button>
+        </div>
+    </div>
+
+    <!-- Modale Video (Cutscene a tutto schermo) -->
+    <div id="video-modal" class="modal hidden">
+        <div class="modal-content rdr-paper-bg">
+            <h2 id="video-title">Titolo Video</h2>
+            <div class="video-wrapper">
+                <button id="start-video-btn" class="rdr-btn start-overlay">🎬 Avvia Nastro</button>
+                <video id="video-player" class="hidden" src="" controls playsinline></video>
+            </div>
+            <p id="video-clue" class="clue-text"></p>
+            <button class="rdr-btn" onclick="closeModal('video-modal')">Chiudi e Cerca</button>
+        </div>
+    </div>
+
+    <!-- Modale Cassaforte (Minigioco Tattile) -->
+    <div id="safe-modal" class="modal hidden">
+        <div class="modal-content dark-bg">
+            <h2 class="red-title">Cassaforte del Treno</h2>
+            <p id="status-text">Gira la ghiera. Ascolta i clic e tieni la posizione.</p>
+            
+            <div class="safe-box">
+                <div class="marker">▼</div>
+                <div id="dial-container">
+                    <div id="dial">
+                        <div class="dial-grip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pins-container">
+                <div class="pin" id="pin-1"></div>
+                <div class="pin" id="pin-2"></div>
+                <div class="pin" id="pin-3"></div>
+            </div>
+            
+            <button class="rdr-btn-secondary" style="margin-top:20px;" onclick="closeModal('safe-modal')">Abbandona</button>
+        </div>
+    </div>
+
+    <!-- Modale Scanner QR -->
+    <div id="qr-modal" class="modal hidden">
+        <div class="modal-content rdr-paper-bg">
+            <h2 class="red-title">Ricostruisci la Mappa</h2>
+            <p id="qr-status" class="clue-text">Cerca in giro per casa i 4 frammenti di mappa e inquadrali. <br><br><strong>Frammenti: 0/4</strong></p>
+            
+            <div id="reader-container">
+                <div id="reader"></div>
+            </div>
+
+            <!-- Questa immagine appare solo dopo aver trovato i 4 QR -->
+            <div id="reconstructed-map" class="hidden" style="margin-top: 15px; border: 2px solid #111;">
+                <p style="font-weight:bold; font-size:1.2rem; margin:10px 0;">MAPPA COMPLETATA!</p>
+                <p>Le coordinate indicano un luogo preciso...<br><strong>LA CUCINA</strong>.</p>
+                <button class="rdr-btn" style="margin-top: 15px;" onclick="closeQRAndProceed()">Procedi in Cucina</button>
+            </div>
+
+            <button id="qr-close-btn" class="rdr-btn-secondary" style="margin-top:15px;" onclick="closeModal('qr-modal')">Chiudi Fotocamera</button>
+        </div>
+    </div>
+
+    <!-- Modale Inserimento Codice -->
+    <div id="puzzle-modal" class="modal hidden">
+        <div class="modal-content rdr-paper-bg">
+            <h2 id="puzzle-title">L'Oggetto Misterioso</h2>
+            <p id="puzzle-description" class="clue-text"></p>
+            <input type="text" id="puzzle-answer" placeholder="Inserisci Codice..." autocomplete="off">
+            <p id="error-message" class="hidden error">Codice errato. Riprova.</p>
+            <button class="rdr-btn" id="submit-puzzle" style="margin-top:15px;">Verifica</button>
+            <button class="rdr-btn-secondary" onclick="closeModal('puzzle-modal')">Indietro</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
