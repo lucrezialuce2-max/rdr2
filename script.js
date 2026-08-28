@@ -1,19 +1,18 @@
-// --- DATABASE DEI NODI ---
 const gameNodes = [
     {
         id: 'nodo1', x: 20, y: 30, unlocked: true,
         type: 'video', 
         title: 'L\'Imboscata',
         content: 'video1.mp4', 
-        clue: '15 anni e devi già schivare i proiettili dei Pinkerton. Per iniziare, devi forzare la cassaforte virtuale qui sull\'app.', 
+        clue: 'I Pinkerton hanno circondato l\'accampamento! Prima di scappare, devi recuperare la tua bisaccia rinchiusa nella cassaforte di sicurezza della banda. Sbloccala in fretta!', 
         unlocks: 'nodo2',
-        successObjective: 'Forza la cassaforte per recuperare la bisaccia.'
+        successObjective: 'Forza la cassaforte dell\'accampamento sull\'app.'
     },
     {
         id: 'nodo2', x: 50, y: 60, unlocked: false,
         type: 'safe', 
         unlocks: 'nodo3',
-        successObjective: 'Controlla il contenuto della bisaccia.'
+        successObjective: 'Controlla il contenuto della bisaccia in cucina.'
     },
     {
         id: 'nodo3', x: 40, y: 75, unlocked: false,
@@ -61,13 +60,11 @@ const gameNodes = [
 
 let currentNode = null;
 
-// --- AVVIO GIOCO ---
 document.getElementById('start-game-btn').addEventListener('click', () => {
     document.getElementById('intro-screen').classList.add('hidden');
     handleNodeClick(gameNodes[0]);
 });
 
-// --- GESTIONE MAPPA E AUTO-SCROLL ---
 function initMap(focusNodeId = null) {
     const container = document.getElementById('map-container');
     container.innerHTML = ''; 
@@ -126,7 +123,6 @@ function handleNodeClick(node) {
     else if (node.type === 'qr') openQRScanner(node);
 }
 
-// --- GESTIONE MODALI GENERALI ---
 function closeModal(modalId) {
     document.getElementById(modalId).classList.add('hidden');
     
@@ -157,7 +153,6 @@ function unlockNextNode() {
     }
 }
 
-// --- LOGICA SCANNER QR ---
 let html5QrCode;
 let foundPieces = [];
 const requiredPieces = ['MAPPA_1', 'MAPPA_2', 'MAPPA_3', 'MAPPA_4'];
@@ -177,9 +172,7 @@ function openQRScanner(node) {
         (decodedText) => {
             handleQRScanned(decodedText);
         },
-        (errorMessage) => {
-            // Errori background
-        }
+        (errorMessage) => {}
     ).catch(err => {
         alert("Errore fotocamera: Devi consentire l'accesso alla fotocamera al sito (usa HTTPS).");
     });
@@ -211,7 +204,6 @@ function closeQRAndProceed() {
     unlockNextNode();
 }
 
-// --- MODALE VIDEO ---
 function openVideoModal(node) {
     document.getElementById('video-title').innerText = node.title;
     document.getElementById('video-clue').innerText = node.clue;
@@ -233,7 +225,6 @@ function openVideoModal(node) {
     document.getElementById('video-modal').classList.remove('hidden');
 }
 
-// --- MODALE PUZZLE ---
 function openPuzzleModal(node) {
     document.getElementById('puzzle-title').innerText = node.title;
     document.getElementById('puzzle-description').innerText = node.description;
@@ -254,7 +245,6 @@ document.getElementById('submit-puzzle').addEventListener('click', () => {
     }
 });
 
-// --- MOTORE MINIGIOCO CASSAFORTE ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playClick(frequency, duration) {
     if (audioCtx.state === 'suspended') audioCtx.resume();
