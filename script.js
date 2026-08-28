@@ -168,13 +168,20 @@ function openQRScanner(node) {
     html5QrCode = new Html5Qrcode("reader");
     html5QrCode.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 250, height: 250 } },
+        { 
+            fps: 15, // Scansione leggermente più veloce
+            // Rende il quadrato responsivo: prende il 70% dello schermo per garantire la messa a fuoco
+            qrbox: (videoWidth, videoHeight) => {
+                let minEdge = Math.min(videoWidth, videoHeight);
+                return { width: minEdge * 0.7, height: minEdge * 0.7 };
+            }
+        },
         (decodedText) => {
             handleQRScanned(decodedText);
         },
         (errorMessage) => {}
     ).catch(err => {
-        alert("Errore fotocamera: Devi consentire l'accesso alla fotocamera al sito (usa HTTPS).");
+        alert("Errore fotocamera: Devi consentire l'accesso alla fotocamera al sito.");
     });
 }
 

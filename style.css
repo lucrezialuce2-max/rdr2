@@ -11,11 +11,12 @@
 
 body {
     background-color: var(--rdr-dark); font-family: 'Special Elite', monospace;
-    height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    height: 100dvh; /* Sostituito vh con dvh per l'altezza dinamica mobile */
+    display: flex; flex-direction: column; overflow: hidden;
 }
 
 #vignette {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
     box-shadow: inset 0 0 120px rgba(0,0,0,0.9); pointer-events: none; z-index: 50;
 }
 
@@ -59,7 +60,7 @@ body {
 .map-marker.locked { color: #555; text-shadow: none; opacity: 0.6; }
 
 .modal {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
     background: rgba(0, 0, 0, 0.9); display: flex; align-items: center;
     justify-content: center; z-index: 100; padding: 20px;
 }
@@ -101,7 +102,7 @@ input[type="text"] {
 
 #video-modal { padding: 0; }
 #video-modal .modal-content {
-    max-width: 100vw; height: 100vh; border: none; border-radius: 0;
+    max-width: 100vw; height: 100%; border: none; border-radius: 0;
     padding: 0; background-color: black; display: flex; flex-direction: column; justify-content: center;
 }
 .video-wrapper { position: relative; width: 100%; flex-grow: 1; background: black; margin: 0; }
@@ -117,11 +118,16 @@ input[type="text"] {
     z-index: 10; color: var(--rdr-paper); text-shadow: 2px 2px 10px black; margin-top: 15px;
 }
 #video-clue {
-    position: absolute; bottom: 90px; left: 5%; width: 90%; z-index: 10;
+    position: absolute; bottom: calc(80px + env(safe-area-inset-bottom, 20px)); left: 5%; width: 90%; z-index: 10;
     color: white; background: rgba(17, 17, 17, 0.85); border: 1px solid var(--rdr-red);
     padding: 12px; font-size: 1rem; border-radius: 4px; text-shadow: 1px 1px 2px black;
 }
-#video-modal .rdr-btn:not(#start-video-btn) { position: absolute; bottom: 20px; left: 5%; width: 90%; z-index: 10; }
+/* Sollevato per evitare il blocco sui telefoni */
+#video-modal .rdr-btn:not(#start-video-btn) { 
+    position: absolute; 
+    bottom: max(20px, env(safe-area-inset-bottom, 20px)); 
+    left: 5%; width: 90%; z-index: 10; 
+}
 
 #status-text { color: #a89f8d; margin-bottom: 30px; font-size: 1.1rem; height: 45px;}
 .safe-box {
